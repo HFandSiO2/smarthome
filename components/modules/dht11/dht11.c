@@ -2,6 +2,7 @@
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "esp_timer.h"
+#include "esp_rom_sys.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -44,9 +45,9 @@ esp_err_t dht11_read(dht11_data_t *out) {
 
     /* === 发送起始信号 === */
     gpio_set_level(s_gpio, 0);
-    ets_delay_us(DHT11_START_LOW);
+    esp_rom_delay_us(DHT11_START_LOW);
     gpio_set_level(s_gpio, 1);
-    ets_delay_us(DHT11_START_HIGH);
+    esp_rom_delay_us(DHT11_START_HIGH);
     gpio_set_direction(s_gpio, GPIO_MODE_INPUT);  /* 切换为输入 */
 
     /* === 等待从机响应 === */
@@ -67,7 +68,7 @@ esp_err_t dht11_read(dht11_data_t *out) {
             return ESP_FAIL;
         }
         /* 延时半周期后采样 */
-        ets_delay_us(DHT11_BIT_HALF);
+        esp_rom_delay_us(DHT11_BIT_HALF);
         int level = gpio_get_level(s_gpio);
         data[i / 8] = (data[i / 8] << 1) | (level & 1);
         /* 等待位结束 */

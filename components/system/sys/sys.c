@@ -1,15 +1,20 @@
 #include <stdio.h>
 #include "sys.h"
 #include "esp_log.h"
-#include "ssd1306.h"
 #include "gpio_def.h"
+#include "hw_config.h"
+#include "display.h"
+#include "dht11.h"
 
 static const char *TAG = "SYS";
 
 void sys_init(void) {
-    gpio_init();
+    /* 基础 GPIO 初始化 */
+    gpio_init(PIN_DHT11, GPIO_INPUT, true);
 
-    ESP_ERROR_CHECK(ssd1306_init(PIN_MOSI, PIN_SCLK, PIN_CS, PIN_DC, PIN_RES));
-    ESP_LOGI(TAG, "SSD1306 initialized");
+    /* 各模块初始化 */
+    display_init();     /* SPI 总线 + SSD1306 OLED 显示 */
+    dht11_init(PIN_DHT11);
 
+    ESP_LOGI(TAG, "All modules initialized");
 }

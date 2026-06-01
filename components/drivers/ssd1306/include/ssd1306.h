@@ -9,10 +9,8 @@
 typedef void* ssd1306_handle_t;
 
 /**
- * @brief Initialize SPI bus and create SSD1306 device
+ * @brief Create SSD1306 device on pre-initialized SPI bus
  *
- * @param mosi_gpio MOSI (SDA) GPIO number
- * @param sclk_gpio SCLK (SCL) GPIO number
  * @param cs_gpio   CS GPIO number
  * @param dc_gpio   DC GPIO number
  * @param rst_gpio  RES GPIO number
@@ -20,7 +18,7 @@ typedef void* ssd1306_handle_t;
  *     - ESP_OK Success
  *     - ESP_FAIL Fail
  */
-esp_err_t ssd1306_init(int mosi_gpio, int sclk_gpio, int cs_gpio, int dc_gpio, int rst_gpio);
+esp_err_t ssd1306_init(int cs_gpio, int dc_gpio, int rst_gpio);
 
 /**
  * @brief Clear framebuffer

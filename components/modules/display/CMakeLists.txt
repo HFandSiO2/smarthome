@@ -1,0 +1,3 @@
+idf_component_register(SRCS "display.c"
+                    INCLUDE_DIRS "include"
+                    REQUIRES ssd1306 spi_bus gpio_def)

@@ -191,18 +191,7 @@ static ssd1306_handle_t ssd1306_create(int cs_gpio, int dc_gpio, int rst_gpio) {
     return (ssd1306_handle_t)dev;
 }
 
-esp_err_t ssd1306_init(int mosi_gpio, int sclk_gpio, int cs_gpio, int dc_gpio, int rst_gpio) {
-    spi_bus_config_t buscfg = {
-        .mosi_io_num = mosi_gpio,
-        .miso_io_num = -1,
-        .sclk_io_num = sclk_gpio,
-        .max_transfer_sz = 0,
-    };
-    esp_err_t ret = spi_bus_initialize(SPI2_HOST, &buscfg, SPI_DMA_CH_AUTO);
-    if (ret != ESP_OK) {
-        ESP_LOGE(TAG, "SPI bus init failed");
-        return ret;
-    }
+esp_err_t ssd1306_init(int cs_gpio, int dc_gpio, int rst_gpio) {
     s_dev = (ssd1306_dev_t *)ssd1306_create(cs_gpio, dc_gpio, rst_gpio);
     if (!s_dev) {
         ESP_LOGE(TAG, "Failed to create SSD1306");
