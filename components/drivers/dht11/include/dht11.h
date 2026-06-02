@@ -11,10 +11,9 @@ typedef struct {
 } dht11_data_t;
 
 /**
- * @brief 初始化 DHT11 传感器 (配置 GPIO)
- * @param gpio_num  DHT11 数据引脚
+ * @brief 初始化 DHT11 传感器
  */
-void dht11_init(int gpio_num);
+void dht11_init(void);
 
 /**
  * @brief 读取 DHT11 温湿度数据
@@ -24,3 +23,5 @@ void dht11_init(int gpio_num);
  *     - ESP_FAIL  读取失败（超时/校验错误）
  */
 esp_err_t dht11_read(dht11_data_t *out);
+
+

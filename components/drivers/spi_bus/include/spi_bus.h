@@ -20,6 +20,11 @@ typedef int spi_bus_handle_t;
 esp_err_t spi_bus_init(int mosi_gpio, int sclk_gpio);
 
 /**
+ * @brief Initialize SPI bus using pins from config.h (no-arg convenience)
+ */
+void spi_init(void);
+
+/**
  * @brief Get SPI bus host handle
  * @return spi_bus_handle_t
  */

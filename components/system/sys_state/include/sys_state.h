@@ -1,7 +1,9 @@
 #pragma once
-
+#include <stdint.h>
+#include <stdbool.h>
 
 typedef struct {
+    /* ---- sensor data ---- */
     float temperature;
     float humidity;
     float smoke_voltage;
@@ -10,17 +12,15 @@ typedef struct {
     bool fire_detected;
     bool human_detected;
 
+    /* ---- actuator state ---- */
     bool fan_on;
     bool light_on;
     bool buzzer_on;
     bool window_open;
 
+    /* ---- UI / system ---- */
     uint8_t menu;
     bool night_mode;
-}sys_state_t;
+} sys_state_t;
 
-
-/**
- * @brief Initialize all system modules (SSD1306, etc.)
- */
-void sys_init(void);
+extern sys_state_t sys;

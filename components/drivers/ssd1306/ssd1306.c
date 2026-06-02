@@ -1,6 +1,7 @@
 #include "ssd1306.h"
 #include "driver/spi_master.h"
 #include "driver/gpio.h"
+#include "config.h"
 #include "esp_log.h"
 #include "string.h"
 #include "freertos/FreeRTOS.h"
@@ -189,6 +190,10 @@ static ssd1306_handle_t ssd1306_create(int cs_gpio, int dc_gpio, int rst_gpio) {
 
     memset(dev->fb, 0, sizeof(dev->fb));
     return (ssd1306_handle_t)dev;
+}
+
+void oled_init(void) {
+    ssd1306_init(PIN_CS, PIN_DC, PIN_RES);
 }
 
 esp_err_t ssd1306_init(int cs_gpio, int dc_gpio, int rst_gpio) {

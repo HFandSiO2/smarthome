@@ -21,6 +21,11 @@ typedef void* ssd1306_handle_t;
 esp_err_t ssd1306_init(int cs_gpio, int dc_gpio, int rst_gpio);
 
 /**
+ * @brief Initialize OLED using pins from config.h (no-arg convenience)
+ */
+void oled_init(void);
+
+/**
  * @brief Clear framebuffer
  */
 void ssd1306_clear(void);

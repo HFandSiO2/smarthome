@@ -1,9 +1,14 @@
 #include "spi_bus.h"
+#include "config.h"
 #include "driver/spi_master.h"
 #include "esp_log.h"
 
 static const char *TAG = "SPI_BUS";
 static bool s_initialized = false;
+
+void spi_init(void) {
+    spi_bus_init(PIN_MOSI, PIN_SCLK);
+}
 
 esp_err_t spi_bus_init(int mosi_gpio, int sclk_gpio) {
     if (s_initialized) {

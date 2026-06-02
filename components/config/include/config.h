@@ -23,3 +23,4 @@
 
 // /* ==================== ADC config ==================== */
 // #define SMOKE_ADC_CHANNEL   ADC_CHANNEL_3    /* GPIO4 -> ADC1_CH3 */
+// #define SMOKE_ADC_ATTEN     ADC_ATTEN_DB_12
