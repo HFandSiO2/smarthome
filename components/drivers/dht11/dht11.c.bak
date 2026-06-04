@@ -1,4 +1,5 @@
 #include "dht11.h"
+#include "config.h"
 #include "driver/gpio.h"
 #include "esp_log.h"
 #include "esp_timer.h"
@@ -11,15 +12,13 @@ static const char *TAG = "DHT11";
 static int s_gpio = -1;
 
 /* DHT11 时序参数 (us) */
-#define DHT11_START_LOW     18000   /* 主机拉低 ≥ 18ms */
-#define DHT11_START_HIGH    30      /* 主机拉高 20-40us */
-#define DHT11_RESP_HIGH     80      /* 从机响应高电平 80us */
-#define DHT11_RESP_LOW      80      /* 从机响应低电平 80us */
-#define DHT11_BIT_HALF      50      /* 数据位半周期 */
+#define DHT11_START_LOW     20000   /* 主机拉低 ≥ 18ms */
+#define DHT11_START_HIGH    40      /* 主机拉高 20-40us */
 
-void dht11_init(int gpio_num) {
-    s_gpio = gpio_num;
+void dht11_init(void) {
+    s_gpio = PIN_DHT11;
     gpio_set_direction(s_gpio, GPIO_MODE_INPUT_OUTPUT_OD);
+    gpio_set_pull_mode(s_gpio, GPIO_PULLUP_ONLY);
     gpio_set_level(s_gpio, 1);  /* 空闲时拉高 */
     ESP_LOGI(TAG, "DHT11 initialized on GPIO %d", s_gpio);
 }
@@ -58,21 +57,26 @@ esp_err_t dht11_read(dht11_data_t *out) {
         return ESP_FAIL;
     }
 
-    /* === 读取 40 bit 数据 === */
+    /* === 读取 40 bit 数据（脉宽测量法，不受延时精度影响） === */
     for (int i = 0; i < 40; i++) {
-        /* 等待低电平结束 (50us) */
+        /* 等待低电平结束（每个 bit 以 50us 低电平开始） */
         if (!dht11_wait_level(1, 100)) {
             ESP_LOGW(TAG, "DHT11 timeout bit %d", i);
             gpio_set_direction(s_gpio, GPIO_MODE_INPUT_OUTPUT_OD);
             gpio_set_level(s_gpio, 1);
             return ESP_FAIL;
         }
-        /* 延时半周期后采样 */
-        esp_rom_delay_us(DHT11_BIT_HALF);
-        int level = gpio_get_level(s_gpio);
-        data[i / 8] = (data[i / 8] << 1) | (level & 1);
-        /* 等待位结束 */
-        dht11_wait_level(0, 100);
+        /* 测量高电平持续时间判断 0/1 */
+        uint32_t t_start = (uint32_t)esp_timer_get_time();
+        if (!dht11_wait_level(0, 100)) {
+            ESP_LOGW(TAG, "DHT11 timeout bit %d (end)", i);
+            gpio_set_direction(s_gpio, GPIO_MODE_INPUT_OUTPUT_OD);
+            gpio_set_level(s_gpio, 1);
+            return ESP_FAIL;
+        }
+        uint32_t t_high = (uint32_t)esp_timer_get_time() - t_start;
+        /* "0"=26-28us, "1"=70us, 以 50us 为界区分 */
+        data[i / 8] = (data[i / 8] << 1) | (t_high > 50 ? 1 : 0);
     }
 
     /* 恢复开漏输出 */

@@ -194,6 +194,8 @@ static ssd1306_handle_t ssd1306_create(int cs_gpio, int dc_gpio, int rst_gpio) {
 
 void oled_init(void) {
     ssd1306_init(PIN_CS, PIN_DC, PIN_RES);
+    ssd1306_clear();
+    ssd1306_refresh();
 }
 
 esp_err_t ssd1306_init(int cs_gpio, int dc_gpio, int rst_gpio) {
