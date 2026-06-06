@@ -19,15 +19,4 @@ void system_init(void) {
     dht11_init();
     ESP_LOGI(TAG, "All modules initialized");
 
-    vTaskDelay(pdMS_TO_TICKS(1000)); // 等待传感器稳定
-    dht11_data_t dht;
-    if (dht11_read(&dht) == ESP_OK) {
-        ESP_LOGI(TAG, "DHT11: %.1f°C %.1f%%", dht.temperature, dht.humidity);
-        char line[32];
-        snprintf(line, sizeof(line), "Temp: %.1f C", dht.temperature);
-        ssd1306_draw_string(0, 0, line);
-        snprintf(line, sizeof(line), "Hum:  %.1f %%", dht.humidity);
-        ssd1306_draw_string(0, 16, line);
-        ssd1306_refresh();
-    }
 }
