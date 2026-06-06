@@ -4,7 +4,6 @@
 #include "gpio_def.h"
 #include "spi_bus.h"
 #include "ssd1306.h"
-#include "config.h"
 #include "dht11.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -16,7 +15,6 @@ void system_init(void) {
     gpio_init();
     spi_init();
     oled_init();
-    dht11_init();
     ESP_LOGI(TAG, "All modules initialized");
 
 }

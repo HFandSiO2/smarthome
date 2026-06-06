@@ -11,11 +11,6 @@ typedef struct {
 } dht11_data_t;
 
 /**
- * @brief 初始化 DHT11 传感器
- */
-void dht11_init(void);
-
-/**
  * @brief 读取 DHT11 温湿度数据
  * @param[out] out  读取到的数据
  * @return

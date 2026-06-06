@@ -22,12 +22,6 @@ static portMUX_TYPE s_mux = portMUX_INITIALIZER_UNLOCKED;
 #define PORT_ENTER_CRITICAL() portENTER_CRITICAL(&s_mux)
 #define PORT_EXIT_CRITICAL()  portEXIT_CRITICAL(&s_mux)
 
-void dht11_init(void) {
-    s_gpio = PIN_DHT11;
-    /* GPIO 方向/上下拉由 gpio_def.c 的 gpio_init() 配置 */
-    ESP_LOGI(TAG, "DHT11 on GPIO %d", s_gpio);
-}
-
 /**
  * @brief 等待引脚到指定电平，记录耗时
  */
