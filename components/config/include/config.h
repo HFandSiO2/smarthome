@@ -33,7 +33,15 @@
 #define PIN_STEP_IN4    GPIO_NUM_12
 
 /* ==================== Button matrix (2x2) ==================== */
-#define PIN_BTN_ROW1    GPIO_NUM_35       /* TODO: 改为不与 SPI 冲突的引脚 */
+#define PIN_BTN_ROW1    GPIO_NUM_35
 #define PIN_BTN_ROW2    GPIO_NUM_36
 #define PIN_BTN_COL1    GPIO_NUM_37
 #define PIN_BTN_COL2    GPIO_NUM_38
+
+/* ==================== WiFi ==================== */
+#define WIFI_SSID       "FreeWiFi"
+#define WIFI_PASS       "12312344"
+
+/* ==================== NTP ==================== */
+#define NTP_SERVER      "ntp1.aliyun.com"
+#define NTP_TZ          "CST-8"

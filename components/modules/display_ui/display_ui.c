@@ -13,6 +13,19 @@ void display_ui_init(void) {
     ESP_LOGI(TAG, "Display UI ready");
 }
 
+void display_ui_show_time(struct tm *tm) {
+    char line[32];
+    ssd1306_clear();
+
+    strftime(line, sizeof(line), "%Y-%m-%d", tm);
+    ssd1306_draw_string(0, 0, line);
+
+    strftime(line, sizeof(line), "%H:%M:%S", tm);
+    ssd1306_draw_string(24, 24, line);
+
+    ssd1306_refresh();
+}
+
 void display_ui_show_sensor(float temperature, float humidity) {
     char line[32];
 

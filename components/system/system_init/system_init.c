@@ -6,6 +6,9 @@
 #include "ssd1306.h"
 #include "display_ui.h"
 #include "menu.h"
+#include "wifi.h"
+#include "ntp.h"
+#include "nvs_flash.h"
 #include "control.h"
 
 static const char *TAG = "INIT";
@@ -15,6 +18,9 @@ void system_init(void) {
     spi_init();
     oled_init();
     display_ui_init();
+    nvs_flash_init();
+    wifi_init();
+    ntp_init();
     menu_init();
     control_init();
 
