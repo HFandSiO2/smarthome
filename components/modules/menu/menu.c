@@ -1,8 +1,7 @@
 #include "menu.h"
 #include "button.h"
 #include "display_ui.h"
-#include "ssd1306.h"
-#include "dht11.h"
+#include "sys_state.h"
 #include "ntp.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -57,19 +56,12 @@ static void refresh_display(void) {
         struct tm tm;
         if (ntp_get_time(&tm)) {
             display_ui_show_time(&tm);
-        } else {
-            ssd1306_clear();
-            ssd1306_draw_string(0, 0, "Syncing time...");
-            ssd1306_refresh();
         }
         break;
     }
-    case 1: {
-        dht11_data_t dht;
-        if (dht11_read(&dht) == ESP_OK)
-            display_ui_show_sensor(dht.temperature, dht.humidity);
+    case 1:
+        display_ui_show_sensor(sys.temperature, sys.humidity);
         break;
-    }
     case 2:
         display_ui_show_menu(s_menu, s_setting_mode, s_start_hour, s_end_hour);
         break;

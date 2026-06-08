@@ -8,6 +8,7 @@
 #include "fan.h"
 #include "light.h"
 #include "stepper.h"
+#include "sys_state.h"
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
@@ -25,12 +26,15 @@ static bool s_stepper_by_mq2 = false;   /* 步进电机被 MQ2 占用 */
 static void task_mq2(void *arg) {
     while (1) {
         float volt = mq2_read_voltage();
+        sys.smoke_voltage = volt;
         ESP_LOGI(TAG, "Smoke: %.2fV", volt);
 
         if (volt >= 3.5f) {
             s_smoke_alarm = true;
             buzzer_on();
+            sys.buzzer_on = true;
             fan_on();
+            sys.fan_on = true;
 
             if (!s_stepper_by_mq2) {
                 s_stepper_by_mq2 = true;
@@ -42,6 +46,8 @@ static void task_mq2(void *arg) {
         } else {
             s_smoke_alarm = false;
             s_stepper_by_mq2 = false;
+            sys.buzzer_on = false;
+            sys.fan_on = false;
         }
         vTaskDelay(pdMS_TO_TICKS(1000));
     }
@@ -50,9 +56,9 @@ static void task_mq2(void *arg) {
 /* ================ 雨滴监控 ================ */
 static void task_raindrop(void *arg) {
     while (1) {
-        /* MQ2 占用步进电机时，雨滴不操作窗户 */
         if (!s_stepper_by_mq2) {
             bool wet = raindrop_is_wet();
+            sys.rain_detected = wet;
 
             if (wet) {
                 /* 检测到雨 → 关窗 */
@@ -69,10 +75,14 @@ static void task_raindrop(void *arg) {
 /* ================ 火焰监控 ================ */
 static void task_fire(void *arg) {
     while (1) {
-        if (fire_detected()) {
+        bool fire = fire_detected();
+        sys.fire_detected = fire;
+        if (fire) {
             buzzer_on();
+            sys.buzzer_on = true;
         } else if (!s_smoke_alarm) {
             buzzer_off();
+            sys.buzzer_on = false;
         }
         vTaskDelay(pdMS_TO_TICKS(500));
     }
@@ -84,13 +94,17 @@ static void task_pir(void *arg) {
 
     while (1) {
         if (pir_detected()) {
+            sys.human_detected = true;
             light_on();
+            sys.light_on = true;
             delay_cnt = 0;
         } else {
+            sys.human_detected = false;
             delay_cnt++;
-            if (delay_cnt >= 5) {   /* 无人约 5s 后关灯 */
+            if (delay_cnt >= 5) {
                 delay_cnt = 0;
                 light_off();
+                sys.light_on = false;
             }
         }
         vTaskDelay(pdMS_TO_TICKS(1000));
@@ -103,10 +117,14 @@ static void task_temp_control(void *arg) {
         if (!s_smoke_alarm) {
             dht11_data_t dht;
             if (dht11_read(&dht) == ESP_OK) {
+                sys.temperature = dht.temperature;
+                sys.humidity    = dht.humidity;
                 if (dht.temperature > 26.0f) {
                     fan_on();
+                    sys.fan_on = true;
                 } else {
                     fan_off();
+                    sys.fan_on = false;
                 }
             }
         }
