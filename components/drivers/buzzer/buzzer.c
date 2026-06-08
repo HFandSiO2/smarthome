@@ -7,8 +7,6 @@ static const char *TAG = "BUZZER";
 static bool s_on = false;
 
 void buzzer_init(void) {
-    /* 引脚已在 gpio_def 中配置 */
-    gpio_set_level(PIN_BUZZER, 1);
     s_on = false;
     ESP_LOGI(TAG, "Buzzer ready");
 }

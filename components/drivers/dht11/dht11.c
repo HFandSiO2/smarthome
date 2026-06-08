@@ -14,6 +14,8 @@ static const char *TAG = "DHT11";
 
 static gpio_num_t s_gpio = -1;
 
+void dht11_init(void) { s_gpio = PIN_DHT11; ESP_LOGI(TAG, "DHT11 on GPIO %d", s_gpio); }
+
 /* DHT11 时序基础间隔 (us) */
 #define DHT_TIMER_INTERVAL  2
 #define DHT_DATA_BITS       40

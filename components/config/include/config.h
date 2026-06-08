@@ -1,6 +1,5 @@
 #pragma once
 #include "driver/gpio.h"
-#include "hal/adc_types.h"
 
 /* ==================== SPI pins for SSD1306 OLED ==================== */
 #define PIN_MOSI        GPIO_NUM_15

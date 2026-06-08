@@ -7,7 +7,6 @@ static const char *TAG = "FAN";
 static bool s_on = false;
 
 void fan_init(void) {
-    gpio_set_level(PIN_FAN, 0);
     s_on = false;
     ESP_LOGI(TAG, "Fan ready");
 }

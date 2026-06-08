@@ -7,7 +7,6 @@ static const char *TAG = "LIGHT";
 static bool s_on = false;
 
 void light_init(void) {
-    gpio_set_level(PIN_LIGHT, 0);
     s_on = false;
     ESP_LOGI(TAG, "Light ready");
 }

@@ -25,6 +25,14 @@ static void event_handler(void *arg, esp_event_base_t base,
 }
 
 void wifi_init(void) {
+    /* NVS 初始化（首次烧录可能需要擦除） */
+    esp_err_t ret = nvs_flash_init();
+    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        ESP_LOGW(TAG, "NVS erase required");
+        nvs_flash_erase();
+        nvs_flash_init();
+    }
+
     ESP_ERROR_CHECK(esp_netif_init());
     ESP_ERROR_CHECK(esp_event_loop_create_default());
 

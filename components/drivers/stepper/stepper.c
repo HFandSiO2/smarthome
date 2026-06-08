@@ -5,6 +5,8 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
+/* 8 拍半步驱动序列 */
+
 static const char *TAG = "STEPPER";
 
 /* 8 拍半步驱动序列 */
@@ -18,8 +20,6 @@ static const gpio_num_t s_pins[4] = {
 };
 
 void stepper_init(void) {
-    /* 引脚已在 gpio_def 中配置 */
-    for (int i = 0; i < 4; i++) gpio_set_level(s_pins[i], 0);
     ESP_LOGI(TAG, "Stepper ready");
 }
 

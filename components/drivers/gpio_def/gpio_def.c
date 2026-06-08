@@ -1,4 +1,3 @@
-#include <stdio.h>
 #include "gpio_def.h"
 #include "esp_log.h"
 #include "config.h"
