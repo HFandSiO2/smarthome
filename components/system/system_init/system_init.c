@@ -8,6 +8,7 @@
 #include "wifi.h"
 #include "ntp.h"
 #include "control.h"
+#include "button.h"
 
 static const char *TAG = "INIT";
 
@@ -18,6 +19,7 @@ void system_init(void) {
     display_ui_init();
     wifi_init();
     ntp_init();
+    button_init();
     menu_init();
     control_init();
 

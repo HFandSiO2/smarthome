@@ -93,7 +93,6 @@ static void task_menu(void *arg) {
 }
 
 void menu_init(void) {
-    button_init();
     refresh_display();
     xTaskCreate(task_menu, "menu", 3072, NULL, 4, NULL);
     ESP_LOGI(TAG, "Menu module started");

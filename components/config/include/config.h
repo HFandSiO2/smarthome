@@ -1,5 +1,6 @@
 #pragma once
 #include "driver/gpio.h"
+#include "hal/adc_types.h"
 
 /* ==================== SPI pins for SSD1306 OLED ==================== */
 #define PIN_MOSI        GPIO_NUM_15
@@ -10,20 +11,19 @@
 
 /* ==================== Sensor pins ==================== */
 #define PIN_DHT11       GPIO_NUM_42      /* DHT11 温湿度               */
-#define PIN_RAIN        GPIO_NUM_47       /* 雨滴传感器 (数字量)        */
-#define PIN_FIRE        GPIO_NUM_48       /* 火焰传感器 (数字量)        */
-#define PIN_PIR         GPIO_NUM_21      /* 人体红外传感器 HC-SR501   */
+#define PIN_RAIN        GPIO_NUM_41       /* 雨滴传感器 (数字量)        */
+#define PIN_FIRE        GPIO_NUM_40       /* 火焰传感器 (数字量)        */
+#define PIN_PIR         GPIO_NUM_20      /* 人体红外传感器 HC-SR501   */
 
 /* ==================== ADC sensor ==================== */
-#define PIN_MQ2         GPIO_NUM_43       /* MQ-2 烟雾传感器 (ADC1_CH4)*/
-#define MQ2_ADC_CHANNEL GPIO_NUM_1
-#define MQ2_ADC_ATTEN   GPIO_NUM_2
+#define PIN_MQ2         GPIO_NUM_1       /* MQ-2 烟雾传感器 (ADC1_CH0)*/
+#define MQ2_ADC_CHANNEL ADC_CHANNEL_0
+#define MQ2_ADC_ATTEN   ADC_ATTEN_DB_12
 
 /* ==================== Actuator pins ==================== */
-#define PIN_BUZZER      GPIO_NUM_40      /* 有源蜂鸣器                 */
-#define PIN_FAN         GPIO_NUM_21      /* 风扇继电器                 */
-#define PIN_LIGHT       GPIO_NUM_47      /* 灯光继电器                 */
-#define PIN_WINDOW      GPIO_NUM_45      /* 窗户舵机 (PWM)            */
+#define PIN_BUZZER      GPIO_NUM_19      /* 有源蜂鸣器                 */
+#define PIN_FAN         GPIO_NUM_3      /* 风扇继电器                 */
+#define PIN_LIGHT       GPIO_NUM_4      /* 灯光继电器                 */
 
 /* ==================== Stepper motor ==================== */
 #define PIN_STEP_IN1    GPIO_NUM_9
